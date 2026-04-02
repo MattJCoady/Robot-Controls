@@ -66,6 +66,7 @@ void turndegrees(float targetDegrees) {
 
   lastIMUTime = micros();
   unsigned long startTime = micros();
+  int printCounter = 0; 
 
   while (true) {
     if (micros() - startTime > TURN_TIMEOUT_US) break;
@@ -76,12 +77,18 @@ void turndegrees(float targetDegrees) {
     lastIMUTime = now;
 
     if (abs(imu.gz) > GYRO_HPF) {
-      heading += imu.gz * dt;
+      heading -= imu.gz * dt;
     }
 
     float relativeTurn = heading - startingHeading;
-    Serial.println(relativeTurn);
-    if (abs(relativeTurn) >= abs(targetDegrees) - TURN_BRAKE_OFFSET) break;
+    if (printCounter++ % 50 == 0) {
+      char numBuf[10];
+      char buf[20];
+      dtostrf(relativeTurn, 6, 2, numBuf);
+      snprintf(buf, sizeof(buf), "RT:%s", numBuf);
+      sendBluetooth(buf);
+    }
+    if (abs(relativeTurn) >= abs(targetDegrees) + TURN_BRAKE_OFFSET) break;
   }
 
   motorstop();

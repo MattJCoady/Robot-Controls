@@ -107,6 +107,6 @@ IMUData readIMU() {
   data.az = (int16_t)raw[2] * ACCEL_SCALE;
   data.gx = (int16_t)raw[3] * GYRO_SCALE;
   data.gy = (int16_t)raw[4] * GYRO_SCALE;
-  data.gz = -(int16_t)raw[5] * GYRO_SCALE;
+  data.gz = (int16_t)raw[5] * GYRO_SCALE;
   return data;
 }
