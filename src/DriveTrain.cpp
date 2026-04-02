@@ -59,6 +59,7 @@ void motorstop()
 
 
 void turndegrees(float targetDegrees) {
+  targetDegrees = -targetDegrees;
   float startingHeading = heading;
   int dir = targetDegrees > 0 ? 1 : -1;
 
