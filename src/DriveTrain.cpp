@@ -58,12 +58,11 @@ void motorstop()
 
 
 
-
 void turndegrees(float targetDegrees) {
   float startingHeading = heading;
   int dir = targetDegrees > 0 ? 1 : -1;
 
-  drive(dir * TURN_SPEED, -dir * TURN_SPEED);
+  drive(dir * TURN_SPEED, dir * TURN_SPEED);
 
   lastIMUTime = micros();
   unsigned long startTime = micros();
