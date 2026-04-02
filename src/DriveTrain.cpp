@@ -80,6 +80,7 @@ void turndegrees(float targetDegrees) {
     }
 
     float relativeTurn = heading - startingHeading;
+    Serial.println(relativeTurn);
     if (abs(relativeTurn) >= abs(targetDegrees) - TURN_BRAKE_OFFSET) break;
   }
 
