@@ -96,7 +96,11 @@ void turndegrees(float targetDegrees) {
   delay(50);
 }
 
-void driveforward(int durationMS)
-{
+void driveforward(int durationMS,int speed)
+{ unsigned long startTime = millis();
+  drive(speed,speed);
+  while (millis() - startTime < (unsigned long)durationMS) {
 
-};
+  }
+  motorstop();
+}
