@@ -17,16 +17,20 @@ long getdistance()
     return duration/58.0; 
 }
 
-bool leftclear()
-{
-    int leftDetected = digitalRead(IR_LEFT);
-    if (leftDetected == LOW) {return false;} 
-    else {return true;}
+bool rightBlocked() {
+  int count = 0;
+  for (int i = 0; i < 10; i++) {
+    if (digitalRead(IR_RIGHT) == LOW) count++;
+    delay(2);
+  }
+  return count >= 7;
 }
 
-bool rightclear()
-{
-    int rightDetected = digitalRead(IR_RIGHT);
-    if (rightDetected == LOW) {return false;} 
-    else {return true;}
+bool leftBlocked() {
+  int count = 0;
+  for (int i = 0; i < 10; i++) {
+    if (digitalRead(IR_LEFT) == LOW) count++;
+    delay(2);
+  }
+  return count >= 7;
 }

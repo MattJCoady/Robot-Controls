@@ -10,5 +10,5 @@
 
 void initsensors();
 long getdistance();
-bool leftclear();
-bool rightclear();
+bool leftBlocked();
+bool rightBlocked();

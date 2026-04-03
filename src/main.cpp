@@ -49,9 +49,10 @@ void loop() {
       break;
 
     case GOING_TO_TARGET:
+    {
       turndegrees(30);
       unsigned long starttime = millis();
-      while (rightclear() == true)
+      while (!leftBlocked())
       {
         drive(100, 100);
       }
@@ -64,7 +65,7 @@ void loop() {
       currentState = AT_TARGET;
       sendBluetooth("Arrived at target, send C to confirm handoff.");
       break;
-
+    }
     case AT_TARGET:
       if (cmd == 'C' || cmd == 'c') {
         currentState = RETURNING_HOME;

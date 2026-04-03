@@ -83,13 +83,6 @@ void turndegrees(float targetDegrees) {
     }
 
     float relativeTurn = heading - startingHeading;
-    if (printCounter++ % 50 == 0) {
-      char numBuf[10];
-      char buf[20];
-      dtostrf(relativeTurn, 6, 2, numBuf);
-      snprintf(buf, sizeof(buf), "RT:%s", numBuf);
-      sendBluetooth(buf);
-    }
     if (abs(relativeTurn) >= abs(targetDegrees) + TURN_BRAKE_OFFSET) break;
   }
 
