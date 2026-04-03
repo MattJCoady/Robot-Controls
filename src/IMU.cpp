@@ -1,6 +1,7 @@
 #include <IMU.h>
 
 float heading = 0;
+float targetHeading = 0;
 unsigned long lastIMUTime = 0;
 
 SPISettings bmi323Settings(1000000, MSBFIRST, SPI_MODE0);

@@ -26,4 +26,5 @@ bool bmi323Init();
 IMUData readIMU();
 
 extern float heading;
+extern float targetHeading;
 extern unsigned long lastIMUTime;

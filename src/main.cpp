@@ -50,11 +50,12 @@ void loop() {
 
     case GOING_TO_TARGET:
     {
-      turndegrees(30);
+      turndegrees(-30);
+      targetHeading = heading;
       unsigned long starttime = millis();
-      while (!leftBlocked())
+      while (!leftBlocked() && !rightBlocked())
       {
-        drive(100, 100);
+        driveforwardUT(100);
       }
       motorstop();
       unsigned long duration = millis() - starttime;

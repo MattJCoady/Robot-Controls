@@ -68,7 +68,6 @@ void turndegrees(float targetDegrees) {
 
   lastIMUTime = micros();
   unsigned long startTime = micros();
-  int printCounter = 0; 
 
   while (true) {
     if (micros() - startTime > TURN_TIMEOUT_US) break;
@@ -90,38 +89,47 @@ void turndegrees(float targetDegrees) {
   delay(50);
 }
 
-void driveforward(int durationMS,int speed)
-  
-//To do: Add Correction to prevent veering
-// {float targetHeading = heading;
-// int baseSpeed = speed;
-// float kp = 3.0;
+void driveforward(int durationMS, int speed) {
+  float targetHeading = heading;
+  int baseSpeed = speed;
+  float kp = 3.0;
+  unsigned long startTime = millis();
+  lastIMUTime = micros();
 
-// unsigned long startTime = millis();
-// lastIMUTime = micros();
-// while (millis() - startTime < (unsigned long)durationMS) {
-//   IMUData imu = readIMU();
-//   unsigned long now = micros();
-//   float dt = (now - lastIMUTime) / 1000000.0f;
-//   lastIMUTime = now;
-// if (abs(imu.gz) > GYRO_HPF) {
-//   heading += imu.gz * dt;
-// }
-
-// float error = targetHeading - heading;
-// int correction = error * kp;
-
-// int leftSpeed = baseSpeed + correction;
-// int rightSpeed = baseSpeed - correction;
-
-// drive(leftSpeed, rightSpeed);
-// }
-// motorstop();
-// }
-{ unsigned long startTime = millis();
-  drive(speed,speed);
   while (millis() - startTime < (unsigned long)durationMS) {
+    IMUData imu = readIMU();
+    unsigned long now = micros();
+    float dt = (now - lastIMUTime) / 1000000.0f;
+    lastIMUTime = now;
 
+    if (abs(imu.gz) > GYRO_HPF) {
+      heading -= imu.gz * dt;  // note: minus to match turndegrees
+    }
+
+    float error = targetHeading - heading;
+    int correction = (int)(error * kp);
+    int leftSpeed = baseSpeed + correction;
+    int rightSpeed = baseSpeed - correction;
+    drive(leftSpeed, rightSpeed);
   }
+
   motorstop();
+}
+
+void driveforwardUT(int speed) {
+  float baseSpeed = speed;
+  float kp = 3.0;
+
+  IMUData imu = readIMU();
+  unsigned long now = micros();
+  float dt = (now - lastIMUTime) / 1000000.0f;
+  lastIMUTime = now;
+
+  if (abs(imu.gz) > GYRO_HPF) {
+    heading -= imu.gz * dt;
+  }
+
+  float error = targetHeading - heading;  // targetHeading needs to be accessible
+  int correction = (int)(error * kp);
+  drive(baseSpeed + correction, baseSpeed - correction);
 }
