@@ -49,11 +49,6 @@ void drive(int leftspeed, int rightspeed)
 
 void motorstop()
 {
-    digitalWrite(D1IN1, LOW);
-    digitalWrite(D1IN2, LOW);
-    digitalWrite(D1IN3, LOW);
-    digitalWrite(D1IN4, LOW);
-
     analogWrite(D1ENA, 0);
     analogWrite(D1ENB, 0);
 }
