@@ -98,6 +98,33 @@ void turndegrees(float targetDegrees) {
 }
 
 void driveforward(int durationMS,int speed)
+  
+//To do: Add Correction to prevent veering
+// {float targetHeading = heading;
+// int baseSpeed = speed;
+// float kp = 3.0;
+
+// unsigned long startTime = millis();
+// lastIMUTime = micros();
+// while (millis() - startTime < (unsigned long)durationMS) {
+//   IMUData imu = readIMU();
+//   unsigned long now = micros();
+//   float dt = (now - lastIMUTime) / 1000000.0f;
+//   lastIMUTime = now;
+// if (abs(imu.gz) > GYRO_HPF) {
+//   heading += imu.gz * dt;
+// }
+
+// float error = targetHeading - heading;
+// int correction = error * kp;
+
+// int leftSpeed = baseSpeed + correction;
+// int rightSpeed = baseSpeed - correction;
+
+// drive(leftSpeed, rightSpeed);
+// }
+// motorstop();
+// }
 { unsigned long startTime = millis();
   drive(speed,speed);
   while (millis() - startTime < (unsigned long)durationMS) {
