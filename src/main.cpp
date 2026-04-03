@@ -49,12 +49,7 @@ void loop() {
       break;
 
     case GOING_TO_TARGET:
-      turndegrees(90);
-      delay(100);
-      turndegrees(180);
-      delay(100);
-      turndegrees(-270);
-      delay(100);
+      driveforward(5000, 150);
       currentState = AT_TARGET;
       sendBluetooth("Arrived at target, send C to confirm handoff.");
       break;

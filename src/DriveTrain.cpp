@@ -14,7 +14,8 @@ void initmotors() {
 
 void drive(int leftspeed, int rightspeed)
 {
-    if (leftspeed > 0)
+    leftspeed = -leftspeed;
+    if (rightspeed > 0)
     {
         digitalWrite(D1IN1, HIGH);
         digitalWrite(D1IN2, LOW);
@@ -24,12 +25,12 @@ void drive(int leftspeed, int rightspeed)
     {
         digitalWrite(D1IN1, LOW);
         digitalWrite(D1IN2, HIGH);
-        leftspeed = -leftspeed;
+        rightspeed = -rightspeed;
     }
 
-    analogWrite(D1ENA, constrain(leftspeed, 0, 255));
+    analogWrite(D1ENA, constrain(rightspeed, 0, 255));
 
-    if (rightspeed > 0)
+    if (leftspeed > 0)
     {
         digitalWrite(D1IN3, HIGH);
         digitalWrite(D1IN4, LOW);
@@ -39,10 +40,10 @@ void drive(int leftspeed, int rightspeed)
     {
         digitalWrite(D1IN3, LOW);
         digitalWrite(D1IN4, HIGH);
-        rightspeed = -rightspeed;
+        leftspeed = -leftspeed;
     }
 
-    analogWrite(D1ENB, constrain(rightspeed, 0, 255));
+    analogWrite(D1ENB, constrain(leftspeed, 0, 255));
 }
 
 void motorstop()
