@@ -50,13 +50,17 @@ void loop() {
 
     case GOING_TO_TARGET:
       turndegrees(30);
+      unsigned long starttime = millis();
       while (rightclear() == true)
       {
-        
+        drive(100, 100);
       }
-      driveforward(5000, 150);
-      turndegrees(180);
-      driveforward(5000, 150);
+      motorstop();
+      unsigned long duration = millis() - starttime;
+      turndegrees(-180);
+      driveforward(duration, 100);
+      turndegrees(-30);
+      
       currentState = AT_TARGET;
       sendBluetooth("Arrived at target, send C to confirm handoff.");
       break;
