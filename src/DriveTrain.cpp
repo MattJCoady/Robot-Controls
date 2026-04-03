@@ -2,6 +2,7 @@
 #include <DriveTrain.h>
 #include <IMU.h>
 #include <Bluetooth.h>
+#include <Sensors.h>
 
 void initmotors() {
   pinMode(D1IN1, OUTPUT);
@@ -131,5 +132,6 @@ void driveforwardUT(int speed) {
 
   float error = targetHeading - heading;  // targetHeading needs to be accessible
   int correction = (int)(error * kp);
+  handleObstacles();
   drive(baseSpeed + correction, baseSpeed - correction);
 }

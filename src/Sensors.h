@@ -13,4 +13,4 @@ void initsensors();
 long getdistance();
 bool leftBlocked();
 bool rightBlocked();
-// void handleObstacles();
+void handleObstacles();
