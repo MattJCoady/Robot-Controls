@@ -1,5 +1,6 @@
 #include<Arduino.h>
 #include<Sensors.h>
+#include<DriveTrain.h>
 
 void initsensors() {
   pinMode(IR_LEFT, INPUT);
@@ -34,3 +35,14 @@ bool leftBlocked() {
   }
   return count >= 7;
 }
+
+// void handleObstacles() {
+//     float distance = getdistance();
+//     if (distance > 0 && distance < 25.0){
+//         motorstop();
+//         while (getdistance() < 25.0){
+//             delay(50);
+//             //timeout logic goes here
+//         }
+//     }
+// }

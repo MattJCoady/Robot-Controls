@@ -2,6 +2,7 @@
 #include<Arduino.h>
 
 
+
 #define IR_LEFT 18
 #define IR_RIGHT 19
 #define PIN_TRIG 2
@@ -12,3 +13,4 @@ void initsensors();
 long getdistance();
 bool leftBlocked();
 bool rightBlocked();
+// void handleObstacles();
