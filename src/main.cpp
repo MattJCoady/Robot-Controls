@@ -182,6 +182,7 @@ void loop() {
 
       // 3. Do a -90 degree turn
       turndegrees(-90);
+      lastIMUTime = micros();
       targetHeading = heading;
 
       wallDetected = false;
@@ -214,6 +215,7 @@ void loop() {
       motorstop();
 
       turndegrees(90);
+      lastIMUTime = micros();
       targetHeading = heading;
       wallDetected = false;
       driveStartTime = millis();
@@ -257,6 +259,7 @@ void loop() {
     case RETURNING_HOME:
     {
       turndegrees(-180);
+      lastIMUTime = micros();
       targetHeading = heading;
 
       driveforward(incalab_hall_timer, 100);
@@ -265,10 +268,12 @@ void loop() {
 
       driveforward(hall_powerlab_timer, 100);
       turndegrees(90);
+      lastIMUTime = micros();
       targetHeading = heading;
 
       driveforward(powerlab_home_timer, 100);
       turndegrees(180);
+      lastIMUTime = micros();
       targetHeading = heading;
 
       currentState = IDLE;

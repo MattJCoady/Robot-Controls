@@ -113,7 +113,7 @@ void turndegrees(float targetDegrees) {
   }
 
   motorstop();
-  delay(50);
+  delay(100);
 }
 
 
@@ -160,7 +160,7 @@ void turndegrees(float targetDegrees) {
 void driveforward(int durationMS, int speed) {
   float targetHeading = heading;
   int baseSpeed = speed;
-  float kp = 25;
+  float kp = 5.0;
   unsigned long startTime = millis();
   lastIMUTime = micros();
 
@@ -176,6 +176,7 @@ void driveforward(int durationMS, int speed) {
 
     float error = targetHeading - heading;
     int correction = (int)(error * kp);
+    correction = constrain(correction, -30, 30);
     int leftSpeed = baseSpeed + correction;
     int rightSpeed = baseSpeed - correction;
     drive(leftSpeed, rightSpeed);
@@ -186,7 +187,7 @@ void driveforward(int durationMS, int speed) {
 
 void driveforwardUT(int speed) {
   float baseSpeed = speed;
-  float kp = 25;
+  float kp = 5.0;
 
   IMUData imu = readIMU();
   unsigned long now = micros();
@@ -199,5 +200,6 @@ void driveforwardUT(int speed) {
 
   float error = targetHeading - heading;  // targetHeading needs to be accessible
   int correction = (int)(error * kp);
+  correction = constrain(correction, -30, 30);
   drive(baseSpeed + correction, baseSpeed - correction);
 }
