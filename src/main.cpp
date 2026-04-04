@@ -105,20 +105,131 @@ void loop() {
 
     case GOING_TO_TARGET:
     {
-      turndegrees(-30);
-      targetHeading = heading;
-      unsigned long starttime = millis();
-      while (!leftBlocked() && !rightBlocked())
-      { // no object handler here RN
-        driveforwardUT(100);
-      }
-      motorstop();
-      unsigned long duration = millis() - starttime;
-      turndegrees(-180);
-      driveforward(duration, 100);
-      turndegrees(-30);
+      targetHeading = heading; // Lock in the straight heading
+      unsigned long driveTime1 = 0;
+      unsigned long driveTime2 = 0;
+      unsigned long driveTime3 = 0; 
+      bool wallDetected = false;
+      unsigned long powerlab_home_timer = 0;
+      unsigned long hall_powerlab_timer = 0;
+      unsigned long incalab_hall_timer = 0;
       
-      currentState = IDLE;
+      unsigned long driveStartTime = millis(); // Start the drive stopwatch
+      
+      sendBluetooth("going to doorway");
+
+      while (!wallDetected) {
+        float dist = getdistance();
+
+        // 1. Is there an object in the way?
+        if (dist > 0 && dist < 25.0) {
+            
+            // Pause the stopwatch! Save the time we spent driving so far.
+            driveTime1 += (millis() - driveStartTime);
+            
+            // This stops the motors and waits. Returns true if it's a solid wall.
+            wallDetected = handleObstacles(); 
+            
+            // Restart the stopwatch (If it was just a person, we are about to resume driving)
+            driveStartTime = millis(); 
+            
+        } else {
+            // 2. Path is clear, keep the motors running straight!
+            driveforwardUT(100);
+        }
+      }
+      powerlab_home_timer = driveTime1;
+
+      motorstop();
+      sendBluetooth("Wall detected! Turning left");
+      delay(500); // Brief pause to let physical momentum settle
+
+      // 3. Do a -90 degree turn
+      turndegrees(-90);
+
+      sendBluetooth ("going through hallway");
+      while (!wallDetected) {
+        float dist = getdistance();
+
+        // 1. Is there an object in the way?
+        if (dist > 0 && dist < 25.0) {
+            
+            // Pause the stopwatch! Save the time we spent driving so far.
+            driveTime2 += (millis() - driveStartTime);
+            
+            // This stops the motors and waits. Returns true if it's a solid wall.
+            wallDetected = handleObstacles(); 
+            
+            // Restart the stopwatch (If it was just a person, we are about to resume driving)
+            driveStartTime = millis(); 
+            
+        } else {
+            // 2. Path is clear, keep the motors running straight!
+            driveforwardUT(100);
+        }
+      }
+      hall_powerlab_timer = driveTime2;
+
+      motorstop();
+
+      turndegrees(90);
+      sendBluetooth("going into INCA lab");
+
+      while (!wallDetected) {
+        float dist = getdistance();
+
+        // 1. Is there an object in the way?
+        if (dist > 0 && dist < 25.0) {
+            
+            // Pause the stopwatch! Save the time we spent driving so far.
+            driveTime1 += (millis() - driveStartTime);
+            
+            // This stops the motors and waits. Returns true if it's a solid wall.
+            wallDetected = handleObstacles(); 
+            
+            // Restart the stopwatch (If it was just a person, we are about to resume driving)
+            driveStartTime = millis(); 
+            
+        } else {
+            // 2. Path is clear, keep the motors running straight!
+            driveforwardUT(100);
+        }
+      }
+      powerlab_home_timer = driveTime1;
+
+      motorstop();
+      sendBluetooth("Wall detected! Turning left");
+      delay(500); // Brief pause to let physical momentum settle
+
+      // 3. Do a -90 degree turn
+      turndegrees(-90);
+
+      sendBluetooth ("going through hallway");
+      while (!wallDetected) {
+        float dist = getdistance();
+
+        // 1. Is there an object in the way?
+        if (dist > 0 && dist < 25.0) {
+            
+            // Pause the stopwatch! Save the time we spent driving so far.
+            driveTime3 += (millis() - driveStartTime);
+            
+            // This stops the motors and waits. Returns true if it's a solid wall.
+            wallDetected = handleObstacles(); 
+            
+            // Restart the stopwatch (If it was just a person, we are about to resume driving)
+            driveStartTime = millis(); 
+            
+        } else {
+            // 2. Path is clear, keep the motors running straight!
+            driveforwardUT(100);
+        }
+      }
+      incalab_hall_timer = driveTime3;
+
+      motorstop();
+
+      currentState = AT_TARGET;
       sendBluetooth("Arrived at target, send C to confirm handoff.");
       break;
     }
