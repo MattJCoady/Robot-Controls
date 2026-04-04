@@ -87,8 +87,6 @@ void loop() {
             driveforwardUT(100);
         }
       }
-
-      motorstop();
       sendBluetooth("Wall detected! Turning around...");
       delay(500); // Brief pause to let physical momentum settle
 
@@ -123,7 +121,8 @@ void loop() {
 
         // 1. Is there an object in the way?
         if (dist > 0 && dist < 20.0) {
-            
+
+            motorstop();
             // Pause the stopwatch! Save the time we spent driving so far.
             driveTime1 += (millis() - driveStartTime);
             
@@ -158,6 +157,7 @@ void loop() {
         // 1. Is there an object in the way?
         if (dist > 0 && dist < 20.0) {
             
+            motorstop();
             // Pause the stopwatch! Save the time we spent driving so far.
             driveTime2 += (millis() - driveStartTime);
             
@@ -188,6 +188,7 @@ void loop() {
         // 1. Is there an object in the way?
         if (dist > 0 && dist < 20.0) {
             
+            motorstop();
             // Pause the stopwatch! Save the time we spent driving so far.
             driveTime3 += (millis() - driveStartTime);
             
