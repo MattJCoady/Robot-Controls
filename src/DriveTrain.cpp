@@ -59,9 +59,9 @@ void turndegrees(float targetDegrees) {
   float startingHeading = heading;
   
   // Proportional Tuning Variables
-  float kp = 2.5;
-  int minSpeed = 65;
-  int maxSpeed = 80;
+  float kp = 1.5;
+  int minSpeed = 55;
+  int maxSpeed = 100;
   
   int dir = targetDegrees > 0 ? 1 : -1;
   
@@ -69,7 +69,7 @@ void turndegrees(float targetDegrees) {
   if (dir < 0){
     TURN_BRAKE_OFFSET = 0;  // degrees to stop early, tune empirically
   } else {
-    TURN_BRAKE_OFFSET = 0;
+    TURN_BRAKE_OFFSET = 5;
   }
 
   // Calculate exactly how far the robot needs to travel to trigger the stop

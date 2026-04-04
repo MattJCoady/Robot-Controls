@@ -75,13 +75,13 @@ void loop() {
       }
       else if (cmd == 'q' || cmd == 'Q') {
         sendBluetooth("Turning 360 deg Left...");
-        turndegrees(-360);
+        turndegrees(-180);
         
         sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
       }
       else if (cmd == 'p' || cmd == 'P') {
         sendBluetooth("Turning 360 deg Right...");
-        turndegrees(360);
+        turndegrees(180);
         
         sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
       }
