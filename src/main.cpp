@@ -7,6 +7,10 @@
 enum robotstate {IDLE, GOING_TO_TARGET, AT_TARGET, RETURNING_HOME, DOOR_AND_BACK};
 robotstate currentState = IDLE;
 
+unsigned long powerlab_home_timer = 0;
+unsigned long hall_powerlab_timer = 0;
+unsigned long incalab_hall_timer = 0;
+
 void setup() {
   Serial.begin(9600);
   
@@ -110,10 +114,6 @@ void loop() {
       unsigned long driveTime2 = 0;
       unsigned long driveTime3 = 0; 
       bool wallDetected = false;
-      unsigned long powerlab_home_timer = 0;
-      unsigned long hall_powerlab_timer = 0;
-      unsigned long incalab_hall_timer = 0;
-      
       unsigned long driveStartTime = millis(); // Start the drive stopwatch
       
       sendBluetooth("going to doorway");
@@ -146,6 +146,10 @@ void loop() {
 
       // 3. Do a -90 degree turn
       turndegrees(-90);
+      targetHeading = heading;
+
+      wallDetected = false;
+      driveStartTime = millis();
 
       sendBluetooth ("going through hallway");
       while (!wallDetected) {
@@ -173,38 +177,11 @@ void loop() {
       motorstop();
 
       turndegrees(90);
+      targetHeading = heading;
+      wallDetected = false;
+      driveStartTime = millis();
+
       sendBluetooth("going into INCA lab");
-
-      while (!wallDetected) {
-        float dist = getdistance();
-
-        // 1. Is there an object in the way?
-        if (dist > 0 && dist < 25.0) {
-            
-            // Pause the stopwatch! Save the time we spent driving so far.
-            driveTime1 += (millis() - driveStartTime);
-            
-            // This stops the motors and waits. Returns true if it's a solid wall.
-            wallDetected = handleObstacles(); 
-            
-            // Restart the stopwatch (If it was just a person, we are about to resume driving)
-            driveStartTime = millis(); 
-            
-        } else {
-            // 2. Path is clear, keep the motors running straight!
-            driveforwardUT(100);
-        }
-      }
-      powerlab_home_timer = driveTime1;
-
-      motorstop();
-      sendBluetooth("Wall detected! Turning left");
-      delay(500); // Brief pause to let physical momentum settle
-
-      // 3. Do a -90 degree turn
-      turndegrees(-90);
-
-      sendBluetooth ("going through hallway");
       while (!wallDetected) {
         float dist = getdistance();
 
@@ -242,12 +219,19 @@ void loop() {
     case RETURNING_HOME:
     {
       turndegrees(180);
-      driveforward(100, incalab_hall_timer);
+      targetHeading = heading;
+
+      driveforward(incalab_hall_timer, 100);
       turndegrees(-90);
-      driveforward(100, hall_powerlab_timer);
+      targetHeading = heading;
+
+      driveforward(hall_powerlab_timer, 100);
       turndegrees(90);
-      driveforward(100, powerlab_home_timer);
+      targetHeading = heading;
+
+      driveforward(powerlab_home_timer, 100);
       turndegrees(180);
+      targetHeading = heading;
 
       currentState = IDLE;
       sendBluetooth("Returned home, send S to start.");
