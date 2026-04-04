@@ -129,9 +129,18 @@ void loop() {
       break;
 
     case RETURNING_HOME:
+    {
+      turndegrees(180);
+      driveforward(100, incalab_hall_timer);
+      turndegrees(-90);
+      driveforward(100, hall_powerlab_timer);
+      turndegrees(90);
+      driveforward(100, powerlab_home_timer);
+      turndegrees(180);
+
       currentState = IDLE;
       sendBluetooth("Returned home, send S to start.");
       break;
+    }
   }
 }
-// Note tried the door and back function 
