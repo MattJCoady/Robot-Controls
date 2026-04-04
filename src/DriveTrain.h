@@ -13,7 +13,7 @@
 #define D1IN4 17
 #define D1ENB 6  // PWM Speed
 
-#define TURN_SPEED  80
+#define TURN_SPEED  60
 #define GYRO_HPF    0.35f  // Ignore gyro readings below this
 #define TURN_TIMEOUT_US 5000000UL
 

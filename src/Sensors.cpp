@@ -14,7 +14,10 @@ long getdistance()
     digitalWrite(PIN_TRIG, HIGH);
     delayMicroseconds(10);
     digitalWrite(PIN_TRIG, LOW);
-    long duration = pulseIn(PIN_ECHO, HIGH);
+    long duration = pulseIn(PIN_ECHO, HIGH, 20000);
+    if (duration == 0) {
+      return 999;
+    }
     return duration/58.0; 
 }
 
@@ -55,11 +58,13 @@ bool handleObstacles() {
 }
 
 bool obstacleDetected() {
-  int count = 0;
-  for (int i = 0; i < 5; i++) {
+  static unsigned long lastPingTime = 0;
+  if (millis() - lastPingTime > 50){
+    lastPingTime = millis();
     float d = getdistance();
-    if (d > 0 && d < 20.0) count++;
-    delay(10);
+    if (d > 0 && d < 20.0) {
+      return true;
+    }
   }
-  return count >= 4;
+  return false;
 }

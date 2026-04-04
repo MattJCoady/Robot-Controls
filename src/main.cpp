@@ -154,7 +154,6 @@ void loop() {
       sendBluetooth("going to doorway");
 
       while (!wallDetected) {
-        float dist = getdistance();
 
         // 1. Is there an object in the way?
         if (obstacleDetected()) {
@@ -168,6 +167,8 @@ void loop() {
             
             // Restart the stopwatch (If it was just a person, we are about to resume driving)
             driveStartTime = millis(); 
+
+            lastIMUTime = micros();
             
         } else {
             // 2. Path is clear, keep the motors running straight!
@@ -183,14 +184,13 @@ void loop() {
       // 3. Do a -90 degree turn
       turndegrees(-90);
       lastIMUTime = micros();
-      targetHeading = heading;
+      targetHeading = targetHeading - 90;
 
       wallDetected = false;
       driveStartTime = millis();
 
       sendBluetooth ("going through hallway");
       while (!wallDetected) {
-        float dist = getdistance();
 
         // 1. Is there an object in the way?
         if (obstacleDetected()) {
@@ -204,6 +204,8 @@ void loop() {
             
             // Restart the stopwatch (If it was just a person, we are about to resume driving)
             driveStartTime = millis(); 
+
+            lastIMUTime = micros();
             
         } else {
             // 2. Path is clear, keep the motors running straight!
@@ -216,13 +218,12 @@ void loop() {
 
       turndegrees(90);
       lastIMUTime = micros();
-      targetHeading = heading;
+      targetHeading = targetHeading + 90;
       wallDetected = false;
       driveStartTime = millis();
 
       sendBluetooth("going into INCA lab");
       while (!wallDetected) {
-        float dist = getdistance();
 
         // 1. Is there an object in the way?
         if (obstacleDetected()) {
@@ -236,6 +237,8 @@ void loop() {
             
             // Restart the stopwatch (If it was just a person, we are about to resume driving)
             driveStartTime = millis(); 
+
+            lastIMUTime = micros();
             
         } else {
             // 2. Path is clear, keep the motors running straight!
@@ -260,21 +263,21 @@ void loop() {
     {
       turndegrees(-180);
       lastIMUTime = micros();
-      targetHeading = heading;
+      targetHeading = targetHeading - 180;
 
       driveforward(incalab_hall_timer, 100);
       turndegrees(-90);
-      targetHeading = heading;
+      targetHeading = targetHeading - 90;
 
       driveforward(hall_powerlab_timer, 100);
       turndegrees(90);
       lastIMUTime = micros();
-      targetHeading = heading;
+      targetHeading = targetHeading + 90;
 
       driveforward(powerlab_home_timer, 100);
       turndegrees(180);
       lastIMUTime = micros();
-      targetHeading = heading;
+      targetHeading = targetHeading + 180;
 
       currentState = IDLE;
       sendBluetooth("Returned home, send S to start.");
