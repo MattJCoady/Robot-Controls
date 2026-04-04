@@ -38,7 +38,7 @@ bool leftBlocked() {
 
 bool handleObstacles() { //took it out of both drivefunctions. Calling this directly in main()
     float distance = getdistance();
-    if (distance > 0 && distance < 25.0){
+    if (distance > 0 && distance < 20.0){
         motorstop();
         unsigned long waitStart = millis();
 

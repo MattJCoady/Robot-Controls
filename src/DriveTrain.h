@@ -15,7 +15,6 @@
 
 #define TURN_SPEED  80
 #define GYRO_HPF    0.8f  // Ignore gyro readings below this
-#define TURN_BRAKE_OFFSET 0.0f   // degrees to stop early, tune empirically
 #define TURN_TIMEOUT_US 5000000UL
 
 void initmotors();

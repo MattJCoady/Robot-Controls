@@ -122,7 +122,7 @@ void loop() {
         float dist = getdistance();
 
         // 1. Is there an object in the way?
-        if (dist > 0 && dist < 25.0) {
+        if (dist > 0 && dist < 20.0) {
             
             // Pause the stopwatch! Save the time we spent driving so far.
             driveTime1 += (millis() - driveStartTime);
@@ -156,7 +156,7 @@ void loop() {
         float dist = getdistance();
 
         // 1. Is there an object in the way?
-        if (dist > 0 && dist < 25.0) {
+        if (dist > 0 && dist < 20.0) {
             
             // Pause the stopwatch! Save the time we spent driving so far.
             driveTime2 += (millis() - driveStartTime);
@@ -186,7 +186,7 @@ void loop() {
         float dist = getdistance();
 
         // 1. Is there an object in the way?
-        if (dist > 0 && dist < 25.0) {
+        if (dist > 0 && dist < 20.0) {
             
             // Pause the stopwatch! Save the time we spent driving so far.
             driveTime3 += (millis() - driveStartTime);

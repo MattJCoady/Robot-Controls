@@ -56,9 +56,16 @@ void motorstop()
 
 
 void turndegrees(float targetDegrees) {
+  float TURN_BRAKE_OFFSET;
   targetDegrees = -targetDegrees;
   float startingHeading = heading;
   int dir = targetDegrees > 0 ? 1 : -1;
+  if (dir < 0){
+    TURN_BRAKE_OFFSET = -2.5;  // degrees to stop early, tune empirically
+  }
+  else {
+    TURN_BRAKE_OFFSET = 0;
+  }
 
   drive(-dir * TURN_SPEED, dir * TURN_SPEED);
 
@@ -88,7 +95,7 @@ void turndegrees(float targetDegrees) {
 void driveforward(int durationMS, int speed) {
   float targetHeading = heading;
   int baseSpeed = speed;
-  float kp = 3.0;
+  float kp = 25;
   unsigned long startTime = millis();
   lastIMUTime = micros();
 
@@ -114,7 +121,7 @@ void driveforward(int durationMS, int speed) {
 
 void driveforwardUT(int speed) {
   float baseSpeed = speed;
-  float kp = 3.0;
+  float kp = 25;
 
   IMUData imu = readIMU();
   unsigned long now = micros();
