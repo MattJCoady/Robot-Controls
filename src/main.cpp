@@ -4,7 +4,7 @@
 #include<IMU.h>
 #include<Bluetooth.h>
 
-enum robotstate {IDLE, GOING_TO_TARGET, AT_TARGET, RETURNING_HOME, DOOR_AND_BACK};
+enum robotstate {IDLE, GOING_TO_TARGET, AT_TARGET, RETURNING_HOME, DOOR_AND_BACK, TURNING};
 robotstate currentState = IDLE;
 
 unsigned long powerlab_home_timer = 0;
@@ -53,8 +53,45 @@ void loop() {
       if (cmd == 'B' || cmd == 'b') {
         currentState = DOOR_AND_BACK;
       }
-    
+      if (cmd == 'T' || cmd == 't') {
+        currentState = TURNING;
+      }
       break;
+
+    case TURNING:{
+      // If we received a valid command, execute the turn
+      if (cmd == 'l' || cmd == 'L') {
+        sendBluetooth("Turning 90 deg Left...");
+        turndegrees(-90);  // Positive is usually Left
+        
+        // Re-print the menu after finishing
+        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+      }
+      else if (cmd == 'r' || cmd == 'R') {
+        sendBluetooth("Turning 90 deg Right...");
+        turndegrees(90); // Negative is usually Right
+        
+        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+      }
+      else if (cmd == 't' || cmd == 'T') {
+        sendBluetooth("Turning 360 deg Left...");
+        turndegrees(-360);
+        
+        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+      }
+      else if (cmd == 'p' || cmd == 'P') {
+        sendBluetooth("Turning 360 deg Right...");
+        turndegrees(360);
+        
+        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+      }
+      
+      // If no valid command was sent, it just breaks and loops again, 
+      // waiting silently for the next command!
+      break;
+    }
+    
+
     
     
     case DOOR_AND_BACK:
