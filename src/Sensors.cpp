@@ -36,20 +36,20 @@ bool leftBlocked() {
   return count >= 7;
 }
 
-bool handleObstacles() { //took it out of both drivefunctions. Calling this directly in main()
-    float distance = getdistance();
-    if (distance > 0 && distance < 20.0){
-        motorstop();
-        unsigned long waitStart = millis();
+bool handleObstacles() {
+    unsigned long waitStart = millis();
 
-        while (getdistance() < 25.0){
-          if (millis() - waitStart > 3000) {
-            return true; //over 3 sec assume wall
-          }
-            delay(50);
-            //timeout logic goes here
+    while (true) {
+        if (millis() - waitStart > 3000) {
+            return true;
         }
-        return false; //moved 
+        int clearCount = 0;
+        for (int i = 0; i < 5; i++) {
+            if (getdistance() > 20.0) clearCount++;
+            delay(10);
+        }
+        if (clearCount >= 4) {
+            return false;
+        }
     }
-    return false; // path is clear
 }
