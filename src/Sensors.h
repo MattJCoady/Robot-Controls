@@ -14,3 +14,4 @@ long getdistance();
 bool leftBlocked();
 bool rightBlocked();
 bool handleObstacles();
+bool obstacleDetected();

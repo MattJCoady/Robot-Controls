@@ -53,3 +53,13 @@ bool handleObstacles() {
         }
     }
 }
+
+bool obstacleDetected() {
+  int count = 0;
+  for (int i = 0; i < 5; i++) {
+    float d = getdistance();
+    if (d > 0 && d < 20.0) count++;
+    delay(10);
+  }
+  return count >= 4;
+}
