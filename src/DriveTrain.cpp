@@ -60,14 +60,14 @@ void turndegrees(float targetDegrees) {
   
   // Proportional Tuning Variables
   float kp = 2.5;
-  int minSpeed = 30;
+  int minSpeed = 65;
   int maxSpeed = 80;
   
   int dir = targetDegrees > 0 ? 1 : -1;
   
   // Your custom asymmetric offsets
   if (dir < 0){
-    TURN_BRAKE_OFFSET = -2.5;  // degrees to stop early, tune empirically
+    TURN_BRAKE_OFFSET = 0;  // degrees to stop early, tune empirically
   } else {
     TURN_BRAKE_OFFSET = 0;
   }

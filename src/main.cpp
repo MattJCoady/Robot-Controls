@@ -73,7 +73,7 @@ void loop() {
         
         sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
       }
-      else if (cmd == 't' || cmd == 'T') {
+      else if (cmd == 'q' || cmd == 'Q') {
         sendBluetooth("Turning 360 deg Left...");
         turndegrees(-360);
         
@@ -256,7 +256,7 @@ void loop() {
 
     case RETURNING_HOME:
     {
-      turndegrees(180);
+      turndegrees(-180);
       targetHeading = heading;
 
       driveforward(incalab_hall_timer, 100);
