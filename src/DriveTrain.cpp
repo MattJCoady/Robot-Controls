@@ -186,7 +186,7 @@ void turndegrees(float targetDegrees) {
   
   // 1. Give it enough power to overcome floor friction!
   // If it still turns slowly, increase this to 100 or 120.
-  int turnSpeed = 90; 
+  int turnSpeed = 75; 
   
   drive(-dir * turnSpeed, dir * turnSpeed);
 
@@ -213,12 +213,6 @@ void turndegrees(float targetDegrees) {
     }
   }
 
-  // --- THE COUNTER-THRUST BRAKE ---
-  // Instantly throw the motors in reverse to kill momentum
-  drive(dir * turnSpeed, -dir * turnSpeed);
-  
-  // Hold the reverse thrust for just 40 milliseconds to absorb the shock. 
-  delay(40); 
   
   // Safely cut the power
   motorstop();
@@ -288,7 +282,8 @@ void driveforward(int durationMS, int speed) {
     int rightSpeed = baseSpeed - correction;
     drive(leftSpeed, rightSpeed);
   }
-
+  drive(-baseSpeed, -baseSpeed);
+  delay(40);
   motorstop();
 }
 
