@@ -289,6 +289,7 @@ void loop() {
         else {driveforwardUT(150);}
       }
 
+      motorstop();
       turndegrees(-90);
 
       lastIMUTime = micros();
@@ -315,7 +316,9 @@ void loop() {
         else {driveforwardUT(150);}
       }
 
+      motorstop();
       turndegrees(90);
+
       lastIMUTime = micros();
       targetHeading = targetHeading + 90;
       wallDetected = false;
@@ -340,7 +343,9 @@ void loop() {
         else {driveforwardUT(150);}
       }
       
+      motorstop();
       turndegrees(180);
+      
       lastIMUTime = micros();
       targetHeading = targetHeading + 180;
 
