@@ -4,7 +4,7 @@
 #include<IMU.h>
 #include<Bluetooth.h>
 
-enum robotstate {IDLE, GOING_TO_TARGET, AT_TARGET, RETURNING_HOME, DOOR_AND_BACK, TURNING};
+enum robotstate {IDLE, GOING_TO_TARGET, AT_TARGET, RETURNING_HOME,TURNING};
 robotstate currentState = IDLE;
 
 unsigned long powerlab_home_timer = 0;
@@ -50,98 +50,40 @@ void loop() {
       if (cmd == 'S' || cmd == 's') {
         currentState = GOING_TO_TARGET;
       }
-      if (cmd == 'B' || cmd == 'b') {
-        currentState = DOOR_AND_BACK;
-      }
       if (cmd == 'T' || cmd == 't') {
         currentState = TURNING;
       }
       break;
 
     case TURNING:{
-      // If we received a valid command, execute the turn
       if (cmd == 'l' || cmd == 'L') {
         sendBluetooth("Turning 90 deg Left...");
-        turndegrees(-90);  // Positive is usually Left
+        turndegrees(-90); 
         
-        // Re-print the menu after finishing
-        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+        sendBluetooth("Ready. l:90L, r:90R, q:180L, p:180R");
       }
       else if (cmd == 'r' || cmd == 'R') {
         sendBluetooth("Turning 90 deg Right...");
-        turndegrees(90); // Negative is usually Right
+        turndegrees(90);
         
-        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+        sendBluetooth("Ready. l:90L, r:90R, q:180L, p:180R");
       }
       else if (cmd == 'q' || cmd == 'Q') {
-        sendBluetooth("Turning 360 deg Left...");
+        sendBluetooth("Turning 180 deg Left...");
         turndegrees(-180);
         
-        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+        sendBluetooth("Ready. l:90L, r:90R, q:180L, p:180R");
       }
       else if (cmd == 'p' || cmd == 'P') {
-        sendBluetooth("Turning 360 deg Right...");
+        sendBluetooth("Turning 180 deg Right...");
         turndegrees(180);
         
-        sendBluetooth("Ready. l:90L, r:90R, t:360L, p:360R");
+        sendBluetooth("Ready. l:90L, r:90R, q:180L, p:180R");
       }
       
-      // If no valid command was sent, it just breaks and loops again, 
-      // waiting silently for the next command!
       break;
     }
     
-
-    
-    
-    case DOOR_AND_BACK:
-    {
-      targetHeading = heading; // Lock in the straight heading
-      unsigned long totalDriveTime = 0; 
-      bool wallDetected = false;
-      
-      unsigned long driveStartTime = millis(); // Start the drive stopwatch
-      
-      sendBluetooth("Driving to door...");
-
-    while (!wallDetected) {
-        // 1. Is there an object in the way?
-        if (obstacleDetected()) {
-            // Pause the stopwatch! Save the time we spent driving so far.
-            totalDriveTime += (millis() - driveStartTime);
-            
-            // This stops the motors and waits. Returns true if it's a solid wall.
-            wallDetected = handleObstacles(); 
-            
-            // Restart the stopwatch (If it was just a person, we are about to resume driving)
-            driveStartTime = millis(); 
-            
-            // DON'T FORGET THIS!
-            lastIMUTime = micros();
-            
-        } else {
-            // 2. Path is clear, keep the motors running straight!
-            driveforwardUT(150);
-        }
-      }
-      sendBluetooth("Wall detected! Turning around...");
-      delay(500); // Brief pause to let physical momentum settle
-
-      // 3. Do a 180 degree turn
-      turndegrees(-180);
-
-      // 4. Drive back to the start using the exact time we accumulated
-      sendBluetooth("Returning home...");
-      driveforward(totalDriveTime, 150); 
-
-      // 5. Spin 180 to face original orientation (optional, but good practice)
-      turndegrees(-180);
-
-      currentState = IDLE;
-      sendBluetooth("Returned home. Send S to start.");
-      break;
-    }
-
     case GOING_TO_TARGET:
     {
       heading = 0.0;
@@ -167,7 +109,7 @@ void loop() {
             // This stops the motors and waits. Returns true if it's a solid wall.
             wallDetected = handleObstacles(); 
             
-            // Restart the stopwatch (If it was just a person, we are about to resume driving)
+            // Restart the stopwatch 
             driveStartTime = millis(); 
 
             lastIMUTime = micros();
@@ -191,26 +133,22 @@ void loop() {
       wallDetected = false;
       driveStartTime = millis();
 
-      sendBluetooth ("going through hallway");
+      sendBluetooth ("Going through hallway");
       while (!wallDetected) {
 
-        // 1. Is there an object in the way?
         if (obstacleDetected()) {
             
             motorstop();
-            // Pause the stopwatch! Save the time we spent driving so far.
             driveTime2 += (millis() - driveStartTime);
-            
-            // This stops the motors and waits. Returns true if it's a solid wall.
+        
             wallDetected = handleObstacles(); 
             
-            // Restart the stopwatch (If it was just a person, we are about to resume driving)
             driveStartTime = millis(); 
 
             lastIMUTime = micros();
             
         } else {
-            // 2. Path is clear, keep the motors running straight!
+ 
             driveforwardUT(150);
         }
       }
@@ -224,26 +162,23 @@ void loop() {
       wallDetected = false;
       driveStartTime = millis();
 
-      sendBluetooth("going into INCA lab");
+      sendBluetooth("Going into INCA lab");
       while (!wallDetected) {
 
-        // 1. Is there an object in the way?
         if (obstacleDetected()) {
             
             motorstop();
-            // Pause the stopwatch! Save the time we spent driving so far.
+           
             driveTime3 += (millis() - driveStartTime);
-            
-            // This stops the motors and waits. Returns true if it's a solid wall.
+
             wallDetected = handleObstacles(); 
             
-            // Restart the stopwatch (If it was just a person, we are about to resume driving)
             driveStartTime = millis(); 
 
             lastIMUTime = micros();
             
         } else {
-            // 2. Path is clear, keep the motors running straight!
+
             driveforwardUT(150);
         }
       }

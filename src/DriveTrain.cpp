@@ -53,139 +53,11 @@ void motorstop()
     analogWrite(D1ENB, 0);
 }
 
-// void turndegrees(float targetDegrees) {
-//   float TURN_BRAKE_OFFSET;
-//   targetDegrees = -targetDegrees;
-//   float startingHeading = heading;
-  
-//   // Proportional Tuning Variables
-//   float kp = 1.5;
-//   int minSpeed = 55;
-//   int maxSpeed = 100;
-  
-//   int dir = targetDegrees > 0 ? 1 : -1;
-  
-//   // Your custom asymmetric offsets
-//   if (dir < 0){
-//     TURN_BRAKE_OFFSET = 0;  // degrees to stop early, tune empirically
-//   } else {
-//     TURN_BRAKE_OFFSET = 5;
-//   }
-
-//   // Calculate exactly how far the robot needs to travel to trigger the stop
-//   float targetMagnitude = abs(targetDegrees) + TURN_BRAKE_OFFSET;
-
-//   lastIMUTime = micros();
-//   unsigned long startTime = micros();
-
-//   while (true) {
-//     if (micros() - startTime > TURN_TIMEOUT_US) break;
-
-//     IMUData imu = readIMU();
-//     unsigned long now = micros();
-//     float dt = (now - lastIMUTime) / 1000000.0f;
-//     lastIMUTime = now;
-
-//     if (abs(imu.gz) > GYRO_HPF) {
-//       heading -= imu.gz * dt;
-//     }
-
-//     float relativeTurn = heading - startingHeading;
-//     float currentMagnitude = abs(relativeTurn);
-    
-//     // Calculate degrees remaining until you hit your offset target
-//     float error = targetMagnitude - currentMagnitude;
-
-//     // 1. Stop Condition (Your logic: if we hit or pass the offset target, break)
-//     if (error <= 0) {
-//         break; 
-//     }
-
-//     // 2. Proportional Speed Calculation
-//     int turnPower = error * kp;
-
-//     // 3. Constrain the power bounds
-//     if (turnPower > maxSpeed) turnPower = maxSpeed;
-//     if (turnPower < minSpeed) turnPower = minSpeed;
-
-//     // 4. Update the motor speeds continuously
-//     drive(-dir * turnPower, dir * turnPower);
-//   }
-
-//   motorstop();
-//   delay(100);
-// }
-
-// void turndegrees(float targetDegrees) {
-//   delay(50);
-//   float TURN_BRAKE_OFFSET;
-//   targetDegrees = -targetDegrees;
-//   float startingHeading = heading;
-  
-//   // Proportional Tuning Variables (These actually get used now!)
-//   float kp = 1.5;         // Lowered to prevent aggressive jerking
-//   int minSpeed = 45;      // The lowest speed that can physically turn the wheels
-//   int maxSpeed = 90;      // Fast enough to turn without taking all day
-  
-//   int dir = targetDegrees > 0 ? 1 : -1;
-  
-//   // Your custom asymmetric offsets
-//   if (dir < 0){
-//     TURN_BRAKE_OFFSET = 2.5;  // Right turn offset
-//   } else {
-//     TURN_BRAKE_OFFSET = -2.5;   // Left turn offset
-//   }
-
-//   // Calculate exactly how far the robot needs to travel
-//   float targetMagnitude = abs(targetDegrees) + TURN_BRAKE_OFFSET;
-
-//   lastIMUTime = micros();
-//   unsigned long startTime = micros();
-
-//   while (true) {
-//     if (micros() - startTime > TURN_TIMEOUT_US) break;
-
-//     IMUData imu = readIMU();
-//     unsigned long now = micros();
-//     float dt = (now - lastIMUTime) / 1000000.0f;
-//     lastIMUTime = now;
-
-//     if (abs(imu.gz) > GYRO_HPF) {
-//       heading -= imu.gz * dt;
-//     }
-
-//     float relativeTurn = heading - startingHeading;
-//     float currentMagnitude = abs(relativeTurn);
-    
-//     // Calculate degrees remaining
-//     float error = targetMagnitude - currentMagnitude;
-
-//     // 1. Stop Condition
-//     if (error <= 0) {
-//         break; 
-//     }
-
-//     // 2. Proportional Speed Calculation (This dynamically slows it down!)
-//     int turnPower = error * kp;
-
-//     // 3. Constrain the power bounds
-//     if (turnPower > maxSpeed) turnPower = maxSpeed;
-//     if (turnPower < minSpeed) turnPower = minSpeed;
-
-//     // 4. Update the motor speeds CONTINUOUSLY inside the loop
-//     drive(-dir * turnPower, dir * turnPower);
-//   }
-
-//   motorstop();
-//   delay(100);
-// }
 void turndegrees(float targetDegrees) {
   targetDegrees = -targetDegrees;
   float startingHeading = heading;
   int dir = targetDegrees > 0 ? 1 : -1;
   
-  // 1. Give it enough power to overcome floor friction!
-  // If it still turns slowly, increase this to 100 or 120.
   int turnSpeed = 75; 
   
   drive(-dir * turnSpeed, dir * turnSpeed);
@@ -218,46 +90,6 @@ void turndegrees(float targetDegrees) {
   motorstop();
   delay(100);
 }
-
-// void turndegrees(float targetDegrees) {
-//   float TURN_BRAKE_OFFSET;
-//   targetDegrees = -targetDegrees;
-//   float startingHeading = heading;
-//   float kp = 5;
-//   int minSpeed = 30;
-//   int maxSpeed = 80;
-//   int dir = targetDegrees > 0 ? 1 : -1;
-//   if (dir < 0){
-//     TURN_BRAKE_OFFSET = -5;  // degrees to stop early, tune empirically
-//   }
-//   else {
-//     TURN_BRAKE_OFFSET = 2.5;
-//   }
-
-//   drive(-dir * TURN_SPEED, dir * TURN_SPEED);
-
-//   lastIMUTime = micros();
-//   unsigned long startTime = micros();
-
-//   while (true) {
-//     if (micros() - startTime > TURN_TIMEOUT_US) break;
-
-//     IMUData imu = readIMU();
-//     unsigned long now = micros();
-//     float dt = (now - lastIMUTime) / 1000000.0f;
-//     lastIMUTime = now;
-
-//     if (abs(imu.gz) > GYRO_HPF) {
-//       heading -= imu.gz * dt;
-//     }
-
-//     float relativeTurn = heading - startingHeading;
-//     if (abs(relativeTurn) >= abs(targetDegrees) + TURN_BRAKE_OFFSET) break;
-//   }
-
-//   motorstop();
-//   delay(50);
-// }
 
 void driveforward(int durationMS, int speed) {
   int baseSpeed = speed;
