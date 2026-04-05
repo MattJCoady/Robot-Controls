@@ -265,16 +265,79 @@ void loop() {
       lastIMUTime = micros();
       targetHeading = targetHeading - 180;
 
-      driveforward(incalab_hall_timer, 100);
-      turndegrees(-90);
-      targetHeading = targetHeading - 90;
+      bool wallDetected = false;
+      unsigned long driveStartTime = millis();
+      unsigned long totalDriveTime = 0;
 
-      driveforward(hall_powerlab_timer, 100);
+      while (!wallDetected) {
+        totalDriveTime = millis() - driveStartTime;
+
+        if (totalDriveTime >= incalab_hall_timer) break;
+
+        if (obstacleDetected()) {
+        
+          motorstop();
+          unsigned long pauseStart = millis();
+          wallDetected = handleObstacles(); 
+
+          driveStartTime += (millis() - pauseStart);
+          lastIMUTime = micros();
+        } 
+
+        else {driveforwardUT(100);}
+      }
+
+      turndegrees(-90);
+
+      lastIMUTime = micros();
+      targetHeading = targetHeading - 90;
+      wallDetected = false;
+      driveStartTime = millis();
+      totalDriveTime = 0;
+
+      while (!wallDetected) {
+        totalDriveTime = millis() - driveStartTime;
+
+          if (totalDriveTime >= hall_powerlab_timer) break;
+
+          if (obstacleDetected()) {
+        
+            motorstop();
+            unsigned long pauseStart = millis();
+            wallDetected = handleObstacles(); 
+
+            driveStartTime += (millis() - pauseStart);
+            lastIMUTime = micros();
+          } 
+
+        else {driveforwardUT(100);}
+      }
+
       turndegrees(90);
       lastIMUTime = micros();
       targetHeading = targetHeading + 90;
+      wallDetected = false;
+      driveStartTime = millis();
+      totalDriveTime = 0;
 
-      driveforward(powerlab_home_timer, 100);
+      while (!wallDetected) {
+        totalDriveTime = millis() - driveStartTime;
+
+          if (totalDriveTime >= powerlab_home_timer) break;
+
+          if (obstacleDetected()) {
+        
+            motorstop();
+            unsigned long pauseStart = millis();
+            wallDetected = handleObstacles(); 
+
+            driveStartTime += (millis() - pauseStart);
+            lastIMUTime = micros();
+          } 
+
+        else {driveforwardUT(100);}
+      }
+      
       turndegrees(180);
       lastIMUTime = micros();
       targetHeading = targetHeading + 180;
