@@ -104,12 +104,9 @@ void loop() {
       
       sendBluetooth("Driving to door...");
 
-      while (!wallDetected) {
-        float dist = getdistance();
-
+    while (!wallDetected) {
         // 1. Is there an object in the way?
-        if (dist > 0 && dist < 25.0) {
-            
+        if (obstacleDetected()) {
             // Pause the stopwatch! Save the time we spent driving so far.
             totalDriveTime += (millis() - driveStartTime);
             
@@ -119,9 +116,12 @@ void loop() {
             // Restart the stopwatch (If it was just a person, we are about to resume driving)
             driveStartTime = millis(); 
             
+            // DON'T FORGET THIS!
+            lastIMUTime = micros();
+            
         } else {
             // 2. Path is clear, keep the motors running straight!
-            driveforwardUT(100);
+            driveforwardUT(150);
         }
       }
       sendBluetooth("Wall detected! Turning around...");
@@ -132,7 +132,7 @@ void loop() {
 
       // 4. Drive back to the start using the exact time we accumulated
       sendBluetooth("Returning home...");
-      driveforward(totalDriveTime, 100); 
+      driveforward(totalDriveTime, 150); 
 
       // 5. Spin 180 to face original orientation (optional, but good practice)
       turndegrees(-180);
@@ -144,7 +144,9 @@ void loop() {
 
     case GOING_TO_TARGET:
     {
+      heading = 0.0;
       targetHeading = heading; // Lock in the straight heading
+      lastIMUTime = micros();
       unsigned long driveTime1 = 0;
       unsigned long driveTime2 = 0;
       unsigned long driveTime3 = 0; 
@@ -172,7 +174,7 @@ void loop() {
             
         } else {
             // 2. Path is clear, keep the motors running straight!
-            driveforwardUT(100);
+            driveforwardUT(150);
         }
       }
       powerlab_home_timer = driveTime1;
@@ -209,7 +211,7 @@ void loop() {
             
         } else {
             // 2. Path is clear, keep the motors running straight!
-            driveforwardUT(100);
+            driveforwardUT(150);
         }
       }
       hall_powerlab_timer = driveTime2;
@@ -242,7 +244,7 @@ void loop() {
             
         } else {
             // 2. Path is clear, keep the motors running straight!
-            driveforwardUT(100);
+            driveforwardUT(150);
         }
       }
       incalab_hall_timer = driveTime3;
@@ -261,9 +263,9 @@ void loop() {
 
     case RETURNING_HOME:
     {
-      turndegrees(-180);
+      turndegrees(+180);
       lastIMUTime = micros();
-      targetHeading = targetHeading - 180;
+      targetHeading = targetHeading + 180;
 
       bool wallDetected = false;
       unsigned long driveStartTime = millis();

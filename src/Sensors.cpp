@@ -62,7 +62,7 @@ bool obstacleDetected() {
   if (millis() - lastPingTime > 50){
     lastPingTime = millis();
     float d = getdistance();
-    if (d > 0 && d < 20.0) {
+    if ((d > 0 && d < 20.0) || leftBlocked() || rightBlocked()) { //may need to comment out ir sensors when demoing
       return true;
     }
   }
