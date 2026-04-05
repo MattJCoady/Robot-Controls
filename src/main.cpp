@@ -286,7 +286,7 @@ void loop() {
           lastIMUTime = micros();
         } 
 
-        else {driveforwardUT(100);}
+        else {driveforwardUT(150);}
       }
 
       turndegrees(-90);
@@ -312,7 +312,7 @@ void loop() {
             lastIMUTime = micros();
           } 
 
-        else {driveforwardUT(100);}
+        else {driveforwardUT(150);}
       }
 
       turndegrees(90);
@@ -337,7 +337,7 @@ void loop() {
             lastIMUTime = micros();
           } 
 
-        else {driveforwardUT(100);}
+        else {driveforwardUT(150);}
       }
       
       turndegrees(180);
