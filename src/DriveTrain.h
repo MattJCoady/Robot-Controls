@@ -15,7 +15,7 @@
 
 #define TURN_SPEED  60
 #define GYRO_HPF    0.35f  // Ignore gyro readings below this
-#define TURN_TIMEOUT_US 5000000UL
+#define TURN_TIMEOUT_US 10000000UL
 
 void initmotors();
 void drive(int leftspeed, int rightspeed);
