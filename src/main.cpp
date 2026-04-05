@@ -290,6 +290,7 @@ void loop() {
       }
 
       motorstop();
+      delay(200);
       turndegrees(-90);
 
       lastIMUTime = micros();
@@ -317,6 +318,7 @@ void loop() {
       }
 
       motorstop();
+      delay(200);
       turndegrees(90);
 
       lastIMUTime = micros();
@@ -344,8 +346,9 @@ void loop() {
       }
       
       motorstop();
+      delay(200);
       turndegrees(180);
-      
+
       lastIMUTime = micros();
       targetHeading = targetHeading + 180;
 
