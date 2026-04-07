@@ -66,14 +66,14 @@ void turndegrees(float targetDegrees) {
   unsigned long startTime = micros();
 
   while (true) {
-    if (micros() - startTime > TURN_TIMEOUT_US) break;
+    if (micros() - startTime > TURN_TIMEOUT) break;
 
     IMUData imu = readIMU();
     unsigned long now = micros();
     float dt = (now - lastIMUTime) / 1000000.0f;
     lastIMUTime = now;
 
-    if (abs(imu.gz) > GYRO_HPF) {
+    if (abs(imu.gz) > GYRO_FILTER) {
       heading -= imu.gz * dt;
     }
 
@@ -86,7 +86,7 @@ void turndegrees(float targetDegrees) {
   }
 
   
-  // Safely cut the power
+  // Stop motors and delay
   motorstop();
   delay(100);
 }
@@ -103,7 +103,7 @@ void driveforward(int durationMS, int speed) {
     float dt = (now - lastIMUTime) / 1000000.0f;
     lastIMUTime = now;
 
-    if (abs(imu.gz) > GYRO_HPF) {
+    if (abs(imu.gz) > GYRO_FILTER) {
       heading -= imu.gz * dt;  // note: minus to match turndegrees
     }
 
@@ -114,6 +114,7 @@ void driveforward(int durationMS, int speed) {
     int rightSpeed = baseSpeed - correction;
     drive(leftSpeed, rightSpeed);
   }
+  
   drive(-baseSpeed, -baseSpeed);
   delay(40);
   motorstop();
@@ -128,7 +129,7 @@ void driveforwardUT(int speed) {
   float dt = (now - lastIMUTime) / 1000000.0f;
   lastIMUTime = now;
 
-  if (abs(imu.gz) > GYRO_HPF) {
+  if (abs(imu.gz) > GYRO_FILTER) {
     heading -= imu.gz * dt;
   }
 

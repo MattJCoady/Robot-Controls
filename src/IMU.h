@@ -14,8 +14,8 @@
 
 #define BMI323_SPI_READ          0x80
 
-#define ACCEL_SCALE              (8.0f / 32768.0f)
-#define GYRO_SCALE (500.0f / 32768.0f)
+#define ACCEL_SCALE (8.0f / 32768.0f)
+#define GYRO_SCALE  (500.0f / 32768.0f)
 
 struct IMUData {
   float ax, ay, az;

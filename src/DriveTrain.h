@@ -14,8 +14,8 @@
 #define D1ENB 6  // PWM Speed
 
 #define TURN_SPEED  60
-#define GYRO_HPF    0.35f  // Ignore gyro readings below this
-#define TURN_TIMEOUT_US 10000000UL
+#define GYRO_FILTER    0.35f  // Ignore gyro readings below this
+#define TURN_TIMEOUT 10000000UL
 
 void initmotors();
 void drive(int leftspeed, int rightspeed);

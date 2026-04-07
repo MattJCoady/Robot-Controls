@@ -27,7 +27,7 @@ void setup() {
     while (1);
   }
 
-  lastIMUTime = micros(); // seed the heading timer
+  lastIMUTime = micros(); // Set the heading timer
   sendBluetooth("Ready.");
 }
 
@@ -87,7 +87,7 @@ void loop() {
     case GOING_TO_TARGET:
     {
       heading = 0.0;
-      targetHeading = heading; // Lock in the straight heading
+      targetHeading = heading; // Set the straight heading
       lastIMUTime = micros();
       unsigned long driveTime1 = 0;
       unsigned long driveTime2 = 0;
@@ -99,11 +99,11 @@ void loop() {
 
       while (!wallDetected) {
 
-        // 1. Is there an object in the way?
+        // 1. Is there an object in the way
         if (obstacleDetected()) {
 
             motorstop();
-            // Pause the stopwatch! Save the time we spent driving so far.
+            // Save the time  spent driving so far
             driveTime1 += (millis() - driveStartTime);
             
             // This stops the motors and waits. Returns true if it's a solid wall.
@@ -115,7 +115,7 @@ void loop() {
             lastIMUTime = micros();
             
         } else {
-            // 2. Path is clear, keep the motors running straight!
+            // 2. Path is clear, keep the motors running straight
             driveforwardUT(150);
         }
       }
@@ -123,7 +123,7 @@ void loop() {
 
       motorstop();
       sendBluetooth("Wall detected! Turning left");
-      delay(500); // Brief pause to let physical momentum settle
+      delay(500);
 
       // 3. Do a -90 degree turn
       turndegrees(-90);
